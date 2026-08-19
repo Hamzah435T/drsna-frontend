@@ -3,12 +3,18 @@ import { useState } from 'react';
 export default function HomePage() {
     const [activeCategory, setActiveCategory] = useState('All');
 
+    // Placeholder logout handler
+    const handleLogout = () => {
+        console.log('Logging out...');
+        // Future auth cleanup (clearing tokens/localStorage) will go here
+    };
+
     const categories = ['All', 'General', 'Orthodontics', 'Pediatric', 'Emergency'];
 
     const clinics = [
         {
             id: 1,
-            name: 'Dr. Hala Al Yamani Dental Center\n',
+            name: 'Bright Smiles Dental Clinic',
             tags: ['General', 'Cleaning'],
             rating: 4.9,
             reviewsCount: 212,
@@ -16,7 +22,7 @@ export default function HomePage() {
         },
         {
             id: 2,
-            name: 'Al-Noor Dental Center',
+            name: 'Al-Noor Orthodontic Center',
             tags: ['Orthodontics', 'Braces'],
             rating: 4.8,
             reviewsCount: 96,
@@ -35,12 +41,11 @@ export default function HomePage() {
     return (
         <div className="min-h-screen bg-[#f8fafc] text-slate-800">
             {/* Top Navbar */}
-            <header className="sticky top-0 z-30 bg-white border-b border-slate-200 px-6 py-3">
+            <header className="sticky top-0 z-30 bg-white border-b border-slate-200 px-6 py-3 shadow-sm">
                 <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
                     {/* Brand Logo */}
                     <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-lg bg-sky-100 flex items-center justify-center text-sky-600">
-                            {/* Tooth SVG Icon */}
                             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 2C8.5 2 6 4.5 6 7.5c0 2 .8 4.2 1.3 6.5.6 2.6 1.7 6 4.7 6s4.1-3.4 4.7-6C17.2 11.7 18 9.5 18 7.5 18 4.5 15.5 2 12 2zm0 15c-1.5 0-2.3-2-2.7-4.2C8.8 10.6 8 8.8 8 7.5 8 5.6 9.8 4 12 4s4 1.6 4 3.5c0 1.3-.8 3.1-1.3 5.3-.4 2.2-1.2 4.2-2.7 4.2z"/>
                             </svg>
@@ -62,21 +67,26 @@ export default function HomePage() {
                         />
                     </div>
 
-                    {/* Right Actions */}
+                    {/* Right Actions & Auth Buttons */}
                     <div className="flex items-center gap-3">
-                        <button className="p-2 rounded-xl text-slate-500 hover:bg-slate-100 transition">
-                            <svg className="w-5 h-5 text-sky-700" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                                <line x1="16" y1="2" x2="16" y2="6"/>
-                                <line x1="8" y1="2" x2="8" y2="6"/>
-                                <line x1="3" y1="10" x2="21" y2="10"/>
-                            </svg>
+                        {/* Login / Register Placeholder Buttons */}
+                        <div className="hidden sm:flex items-center gap-2">
+                            <button className="px-3.5 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition">
+                                Log in
+                            </button>
+                            <button className="px-3.5 py-1.5 text-xs font-semibold bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition shadow-sm">
+                                Register
+                            </button>
+                        </div>
+
+                        {/* Logout Button */}
+                        <button
+                            onClick={handleLogout}
+                            className="bg-red-600 text-white px-4 py-1.5 sm:px-5 sm:py-2 rounded-lg font-semibold text-xs sm:text-sm shadow-sm hover:bg-red-700 transition-colors"
+                        >
+                            Log out
                         </button>
-                        <button className="p-2 rounded-xl text-slate-500 hover:bg-slate-100 transition">
-                            <svg className="w-5 h-5 text-sky-700" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                            </svg>
-                        </button>
+
                         {/* User Avatar */}
                         <div className="w-9 h-9 rounded-xl bg-sky-700 text-white font-semibold text-xs flex items-center justify-center shadow-sm">
                             AL
@@ -134,7 +144,6 @@ export default function HomePage() {
                                     className="bg-white border border-slate-200/90 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:shadow-sm transition"
                                 >
                                     <div className="flex items-start gap-4">
-                                        {/* Clinic Icon / Logo Placeholder */}
                                         <div className="w-12 h-12 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 shrink-0">
                                             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                                 <path d="M12 2C8.5 2 6 4.5 6 7.5c0 2 .8 4.2 1.3 6.5.6 2.6 1.7 6 4.7 6s4.1-3.4 4.7-6C17.2 11.7 18 9.5 18 7.5 18 4.5 15.5 2 12 2zm0 15c-1.5 0-2.3-2-2.7-4.2C8.8 10.6 8 8.8 8 7.5 8 5.6 9.8 4 12 4s4 1.6 4 3.5c0 1.3-.8 3.1-1.3 5.3-.4 2.2-1.2 4.2-2.7 4.2z"/>
@@ -204,7 +213,6 @@ export default function HomePage() {
                         </div>
 
                         <div className="grid grid-cols-7 gap-1 text-center text-xs">
-                            {/* Row 1 */}
                             <span className="py-1.5 text-slate-400">16</span>
                             <span className="py-1.5 text-slate-400">17</span>
                             <span className="py-1.5 rounded-lg border border-sky-200 text-sky-700 font-medium">18</span>
@@ -213,7 +221,6 @@ export default function HomePage() {
                             <span className="py-1.5 rounded-lg border border-sky-200 text-sky-700 font-medium">21</span>
                             <span className="py-1.5 text-slate-600">22</span>
 
-                            {/* Row 2 */}
                             <span className="py-1.5 rounded-lg border border-sky-200 text-sky-700 font-medium">23</span>
                             <span className="py-1.5 rounded-lg border border-sky-200 text-sky-700 font-medium">24</span>
                             <span className="py-1.5 text-slate-600">25</span>
