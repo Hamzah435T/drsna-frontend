@@ -19,7 +19,7 @@ export default function ClinicSubmitted() {
           Thanks, <span className="verify-mail">{clinicName}</span>! Your request is now with the DrSna team.
         </p>
         <div className="info-box">
-          Each clinic is reviewed before appearing in patient search results. This usually takes <b>1–2 business days</b>. We'll email <b>{clinicEmail}</b> once your clinic is approved and live.
+          Each clinic is reviewed before appearing in patient search results. This usually takes <b>1–2 business days</b>. We'll email <b>{clinicEmail}</b> once your clinic is approved and live. Once approved, you'll be able to <b>log in with your clinic email and password</b> from the login page.
         </div>
         <Link to="/login" className="btn-primary" style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>Back to log in</Link>
         <p className="switch-line" style={{ marginTop: 24 }}>

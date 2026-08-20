@@ -113,13 +113,19 @@ h1,h2,h3,.brand{font-family:'Outfit',sans-serif;}
 }
 .field input::placeholder{color:#a9bccb;}
 .field input:focus,.field select:focus{border-color:var(--blue);background:#fff;}
+.pw-wrap{position:relative;}
+.pw-wrap input{padding-right:44px;}
+.pw-wrap input::-ms-reveal,.pw-wrap input::-ms-clear{display:none;}
+.pw-toggle{
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;padding:6px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--muted);border-radius:8px;
+}
+.pw-toggle:hover{color:var(--blue-dark);background:var(--tint);}
+
 .field-hint{font-size:11.5px;color:var(--muted);margin-top:5px;}
 .opt{color:var(--muted);font-weight:400;}
-
-.row-between{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:22px;}
-.row-between a{color:var(--blue-dark);text-decoration:none;font-weight:600;}
-.checkbox{display:flex;align-items:center;gap:7px;color:var(--muted);font-family:'Inter',sans-serif;font-size:13px;}
-.checkbox input{width:auto;}
 
 .btn-primary{
   width:100%;
@@ -134,12 +140,6 @@ h1,h2,h3,.brand{font-family:'Outfit',sans-serif;}
   cursor:pointer;
 }
 .btn-primary:hover{background:var(--blue-dark);}
-
-.divider{
-  display:flex;align-items:center;gap:12px;
-  color:var(--muted);font-size:12px;margin:24px 0;
-}
-.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line);}
 
 .switch-line{text-align:center;font-size:13.5px;color:var(--muted);font-family:'Inter',sans-serif;}
 .switch-line a{color:var(--blue-dark);font-weight:600;text-decoration:none;cursor:pointer;}
@@ -157,24 +157,7 @@ h1,h2,h3,.brand{font-family:'Outfit',sans-serif;}
 }
 .clinic-note b{color:var(--navy);}
 
-/* continue with google */
-.btn-google{
-  width:100%;
-  padding:12px 0;
-  background:#fff;
-  color:var(--navy);
-  border:1.5px solid var(--line);
-  border-radius:10px;
-  font-size:14px;
-  font-weight:600;
-  font-family:'Inter',sans-serif;
-  cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  transition:background .15s;
-}
-.btn-google:hover{background:var(--tint);}
-.btn-google svg{width:17px;height:17px;}
-
+/* selects (gender / city / dob) */
 .sel:focus{border-color:var(--blue);background:#fff;}
 .dob-row{display:flex;gap:8px;}
 .dob-row .sel{flex:1;padding:12px 8px;}
