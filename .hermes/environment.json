@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "recipe": {
+    "name": "Vite",
+    "kind": "vite",
+    "bootstrap": [
+      "npm install"
+    ],
+    "build": [
+      "npm run build"
+    ],
+    "test": [
+      "npm run lint"
+    ],
+    "start": "npm run dev",
+    "port": 5175,
+    "readinessPath": "/",
+    "evidence": [
+      "Detected package.json",
+      "Package manager: npm",
+      "Scripts: dev, build, lint, preview"
+    ]
+  },
+  "updatedAt": "2026-08-20T07:24:17.552590+00:00"
+}
