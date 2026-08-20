@@ -1,13 +1,7 @@
 import { useState } from 'react';
 
-export default function HomePage() {
+export default function HomePage({ navigate }) {
     const [activeCategory, setActiveCategory] = useState('All');
-
-    // Placeholder logout handler
-    const handleLogout = () => {
-        console.log('Logging out...');
-        // Future auth cleanup (clearing tokens/localStorage) will go here
-    };
 
     const categories = ['All', 'General', 'Orthodontics', 'Pediatric', 'Emergency'];
 
@@ -71,21 +65,27 @@ export default function HomePage() {
                     <div className="flex items-center gap-3">
                         {/* Login / Register Placeholder Buttons */}
                         <div className="hidden sm:flex items-center gap-2">
-                            <button className="px-3.5 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition">
+                            <button
+                                onClick={() => navigate('login')}
+                                className="px-3.5 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition"
+                            >
                                 Log in
                             </button>
-                            <button className="px-3.5 py-1.5 text-xs font-semibold bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition shadow-sm">
+                            <button
+                                onClick={() => navigate('register')}
+                                className="px-3.5 py-1.5 text-xs font-semibold bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition shadow-sm"
+                            >
                                 Register
                             </button>
                         </div>
 
                         {/* Logout Button */}
-                        <button
-                            onClick={handleLogout}
-                            className="bg-red-600 text-white px-4 py-1.5 sm:px-5 sm:py-2 rounded-lg font-semibold text-xs sm:text-sm shadow-sm hover:bg-red-700 transition-colors"
-                        >
-                            Log out
-                        </button>
+                            <button
+                                onClick={() => navigate('login')}
+                                className="bg-red-600 text-white px-4 py-1.5 sm:px-5 sm:py-2 rounded-lg font-semibold text-xs sm:text-sm shadow-sm hover:bg-red-700 transition-colors"
+                            >
+                                Log out
+                            </button>
 
                         {/* User Avatar */}
                         <div className="w-9 h-9 rounded-xl bg-sky-700 text-white font-semibold text-xs flex items-center justify-center shadow-sm">
@@ -107,7 +107,10 @@ export default function HomePage() {
                                 You have one upcoming appointment and 3 clinics near you accepting new patients.
                             </p>
                         </div>
-                        <button className="whitespace-nowrap px-4 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-medium text-sm transition shadow-sm">
+                        <button
+                            onClick={() => navigate('register')}
+                            className="whitespace-nowrap px-4 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-medium text-sm transition shadow-sm"
+                        >
                             + Book new appointment
                         </button>
                     </div>
@@ -171,7 +174,10 @@ export default function HomePage() {
                                         </div>
                                     </div>
 
-                                    <button className="self-end sm:self-center px-4 py-2 rounded-xl border border-sky-600 text-sky-600 font-medium text-xs sm:text-sm hover:bg-sky-50 transition">
+                                    <button
+                                        onClick={() => navigate('register')}
+                                        className="self-end sm:self-center px-4 py-2 rounded-xl border border-sky-600 text-sky-600 font-medium text-xs sm:text-sm hover:bg-sky-50 transition"
+                                    >
                                         View availability
                                     </button>
                                 </div>
