@@ -1,6 +1,11 @@
+import { useLocation, Link } from 'react-router-dom';
 import AuthShell from '../components/AuthShell';
 
-export default function ClinicSubmitted({ clinicName, clinicEmail, navigate }) {
+export default function ClinicSubmitted() {
+  const { state } = useLocation();
+  const clinicName = state?.clinicName || 'your clinic';
+  const clinicEmail = state?.clinicEmail || 'you';
+
   return (
     <AuthShell tagline="login">
       <div className="auth-card centered">
@@ -16,9 +21,9 @@ export default function ClinicSubmitted({ clinicName, clinicEmail, navigate }) {
         <div className="info-box">
           Each clinic is reviewed before appearing in patient search results. This usually takes <b>1–2 business days</b>. We'll email <b>{clinicEmail}</b> once your clinic is approved and live.
         </div>
-        <button type="button" className="btn-primary" onClick={() => navigate('login')}>Back to log in</button>
+        <Link to="/login" className="btn-primary" style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>Back to log in</Link>
         <p className="switch-line" style={{ marginTop: 24 }}>
-          Need to make a change? <a onClick={() => navigate('register')}>Submit another request</a>
+          Need to make a change? <Link to="/register">Submit another request</Link>
         </p>
       </div>
     </AuthShell>

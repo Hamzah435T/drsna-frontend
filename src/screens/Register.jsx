@@ -1,26 +1,16 @@
 import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import AuthShell from '../components/AuthShell';
-import { CITIES, MONTHS, DAYS, YEARS, validEmail, TAKEN_EMAILS, TAKEN_LICENSES, PASSWORD_RE, LICENSE_RE } from '../lib/auth';
+import { CITIES, validEmail, TAKEN_EMAILS, TAKEN_LICENSES, PASSWORD_RE, LICENSE_RE } from '../lib/auth';
 
-function Select({ id, options, placeholder, value, onChange }) {
-  return (
-    <select id={id} className="sel" value={value} onChange={onChange}>
-      <option value="" disabled>{placeholder}</option>
-      {options.map(o => <option key={o} value={o}>{o}</option>)}
-    </select>
-  );
-}
-
-const EMPTY = {
-  pName: '', pEmail: '', pCity: '', pPassword: '', pConfirm: '', pTerms: false,
-  cName: '', cLicense: '', cOwner: '', cEmail: '', cCity: '', cAddress: '', cTerms: false,
-};
-
-export default function Register({ navigate }) {
+export default function Register() {
+  const navigate = useNavigate();
   const [mode, setMode] = useState('patient');
-  const [gender, setGender] = useState('female');
   const [errs, setErrs] = useState({});
-  const [f, setF] = useState(EMPTY);
+  const [f, setF] = useState({
+    pName: '', pEmail: '', pCity: '', pPassword: '', pConfirm: '', pTerms: false,
+    cName: '', cLicense: '', cEmail: '', cCity: '', cTerms: false,
+  });
 
   const set = (k, val) => setF(prev => ({ ...prev, [k]: val }));
   const clearErr = k => setErrs(e => ({ ...e, [k]: '' }));
@@ -49,12 +39,10 @@ export default function Register({ navigate }) {
     if (!lic) e.cLicense = 'License number is required.';
     else if (!LICENSE_RE.test(lic)) e.cLicense = 'License must be 5–10 digits (Jordan Ministry of Health format).';
     else if (TAKEN_LICENSES.includes(lic)) e.cLicense = 'This license number is already registered.';
-    if (f.cOwner.trim().length < 2) e.cOwner = 'Owner name must be at least 2 characters.';
     if (!email) e.cEmail = 'Email is required.';
     else if (!validEmail(email)) e.cEmail = 'Enter a valid email address.';
     else if (TAKEN_EMAILS.includes(email)) e.cEmail = 'This email is already registered.';
     if (!f.cCity) e.cCity = 'Please select your city.';
-    if (!f.cAddress.trim()) e.cAddress = 'Address is required.';
     if (!f.cTerms) e.cTerms = 'Please accept the Terms & Privacy Policy.';
     setErrs(e);
     return Object.keys(e).length === 0;
@@ -63,15 +51,21 @@ export default function Register({ navigate }) {
   const submit = () => {
     if (mode === 'clinic') {
       if (validateClinic()) {
-        navigate('clinic-submitted', { clinicName: f.cName.trim(), clinicEmail: f.cEmail.trim().toLowerCase() });
+        navigate('/clinic-request', { state: { clinicName: f.cName.trim(), clinicEmail: f.cEmail.trim().toLowerCase() } });
       }
     } else if (validatePatient()) {
-      navigate('verify', { email: f.pEmail.trim().toLowerCase() });
+      navigate('/verify', { state: { email: f.pEmail.trim().toLowerCase() } });
     }
   };
 
   const isClinic = mode === 'clinic';
   const fieldCls = k => 'field' + (errs[k] ? ' has-err' : '');
+  const citySelect = (id, val, setKey) => (
+    <select id={id} className="sel" value={val} onChange={e => { set(setKey, e.target.value); clearErr(setKey); }}>
+      <option value="" disabled>Select city</option>
+      {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
+    </select>
+  );
 
   return (
     <AuthShell tagline="register">
@@ -88,32 +82,18 @@ export default function Register({ navigate }) {
           <div id="patientFields">
             <div className={fieldCls('pName')}>
               <label>Full name</label>
-              <input type="text" value={f.pName} placeholder="Sarah Al-Amin" onChange={e => { set('pName', e.target.value); clearErr('pName'); }} />
+              <input id="pName" type="text" value={f.pName} placeholder="Sarah Al-Amin" onChange={e => { set('pName', e.target.value); clearErr('pName'); }} />
               <div className="err">{errs.pName || ''}</div>
-            </div>
-            <div className="field">
-              <label>Gender</label>
-              <div className="toggle-group gender-toggle" style={{ marginBottom: 0 }}>
-                <button type="button" className={gender === 'female' ? 'active' : ''} onClick={() => setGender('female')}>Female</button>
-                <button type="button" className={gender === 'male' ? 'active' : ''} onClick={() => setGender('male')}>Male</button>
-              </div>
-            </div>
-            <div className="field">
-              <label>Date of birth</label>
-              <div className="dob-row">
-                <Select id="dobDay" options={DAYS} placeholder="Day" />
-                <Select id="dobMonth" options={MONTHS} placeholder="Month" />
-                <Select id="dobYear" options={YEARS} placeholder="Year" />
-              </div>
             </div>
             <div className={fieldCls('pCity')}>
               <label>City</label>
-              <Select id="patientCity" options={CITIES} placeholder="Select city" value={f.pCity} onChange={e => { set('pCity', e.target.value); clearErr('pCity'); }} />
+              {citySelect('patientCity', f.pCity, 'pCity')}
               <div className="err">{errs.pCity || ''}</div>
             </div>
             <div className={fieldCls('pEmail')}>
               <label>Email address</label>
               <input
+                id="pEmail"
                 type="email"
                 value={f.pEmail}
                 placeholder="you@example.com"
@@ -124,17 +104,17 @@ export default function Register({ navigate }) {
             </div>
             <div className={fieldCls('pPassword')}>
               <label>Password</label>
-              <input type="password" value={f.pPassword} placeholder="Create a password" onChange={e => { set('pPassword', e.target.value); clearErr('pPassword'); }} />
+              <input id="pPassword" type="password" value={f.pPassword} placeholder="Create a password" onChange={e => { set('pPassword', e.target.value); clearErr('pPassword'); }} />
               <div className="err">{errs.pPassword || ''}</div>
               <div className="field-hint">8–12 characters with at least one number and one special character.</div>
             </div>
             <div className={fieldCls('pConfirm')}>
               <label>Confirm password</label>
-              <input type="password" value={f.pConfirm} placeholder="Re-enter your password" onChange={e => { set('pConfirm', e.target.value); clearErr('pConfirm'); }} />
+              <input id="pConfirm" type="password" value={f.pConfirm} placeholder="Re-enter your password" onChange={e => { set('pConfirm', e.target.value); clearErr('pConfirm'); }} />
               <div className="err">{errs.pConfirm || ''}</div>
             </div>
             <div className={fieldCls('pTerms')}>
-              <label className="checkbox"><input type="checkbox" checked={f.pTerms} onChange={e => { set('pTerms', e.target.checked); clearErr('pTerms'); }} />I agree to the Terms &amp; Privacy Policy</label>
+              <label className="checkbox"><input id="pTerms" type="checkbox" checked={f.pTerms} onChange={e => { set('pTerms', e.target.checked); clearErr('pTerms'); }} />I agree to the Terms &amp; Privacy Policy</label>
               <div className="err">{errs.pTerms || ''}</div>
             </div>
           </div>
@@ -144,7 +124,7 @@ export default function Register({ navigate }) {
           <div id="clinicFields">
             <div className={fieldCls('cName')}>
               <label>Clinic name</label>
-              <input type="text" value={f.cName} placeholder="Bright Smiles Dental Clinic" onChange={e => { set('cName', e.target.value); clearErr('cName'); }} />
+              <input id="cName" type="text" value={f.cName} placeholder="Bright Smiles Dental Clinic" onChange={e => { set('cName', e.target.value); clearErr('cName'); }} />
               <div className="err">{errs.cName || ''}</div>
             </div>
             <div className="clinic-note">
@@ -152,18 +132,14 @@ export default function Register({ navigate }) {
             </div>
             <div className={fieldCls('cLicense')}>
               <label>License number</label>
-              <input type="text" value={f.cLicense} placeholder="e.g. 45120" onChange={e => { set('cLicense', e.target.value); clearErr('cLicense'); }} />
+              <input id="cLicense" type="text" value={f.cLicense} placeholder="e.g. 45120" onChange={e => { set('cLicense', e.target.value); clearErr('cLicense'); }} />
               <div className="err">{errs.cLicense || ''}</div>
               <div className="field-hint">Jordan Ministry of Health license (5–10 digits)</div>
-            </div>
-            <div className={fieldCls('cOwner')}>
-              <label>Owner name</label>
-              <input type="text" value={f.cOwner} placeholder="Owner's full name" onChange={e => { set('cOwner', e.target.value); clearErr('cOwner'); }} />
-              <div className="err">{errs.cOwner || ''}</div>
             </div>
             <div className={fieldCls('cEmail')}>
               <label>Contact email</label>
               <input
+                id="cEmail"
                 type="email"
                 value={f.cEmail}
                 placeholder="clinic@example.com"
@@ -174,24 +150,11 @@ export default function Register({ navigate }) {
             </div>
             <div className={fieldCls('cCity')}>
               <label>City</label>
-              <Select id="clinicCity" options={CITIES} placeholder="Select city" value={f.cCity} onChange={e => { set('cCity', e.target.value); clearErr('cCity'); }} />
+              {citySelect('clinicCity', f.cCity, 'cCity')}
               <div className="err">{errs.cCity || ''}</div>
             </div>
-            <div className={fieldCls('cAddress')}>
-              <label>Address</label>
-              <input type="text" value={f.cAddress} placeholder="Area, street, building number" onChange={e => { set('cAddress', e.target.value); clearErr('cAddress'); }} />
-              <div className="err">{errs.cAddress || ''}</div>
-            </div>
-            <div className="field">
-              <label>Website <span className="opt">(optional)</span></label>
-              <input type="text" placeholder="https://..." />
-            </div>
-            <div className="field">
-              <label>Additional notes <span className="opt">(optional)</span></label>
-              <input type="text" placeholder="Number of doctors, specialties, working hours..." />
-            </div>
             <div className={fieldCls('cTerms')}>
-              <label className="checkbox"><input type="checkbox" checked={f.cTerms} onChange={e => { set('cTerms', e.target.checked); clearErr('cTerms'); }} />I agree to the Terms &amp; Privacy Policy</label>
+              <label className="checkbox"><input id="cTerms" type="checkbox" checked={f.cTerms} onChange={e => { set('cTerms', e.target.checked); clearErr('cTerms'); }} />I agree to the Terms &amp; Privacy Policy</label>
               <div className="err">{errs.cTerms || ''}</div>
             </div>
           </div>
@@ -202,7 +165,7 @@ export default function Register({ navigate }) {
         </button>
 
         <p className="switch-line" style={{ marginTop: 24 }}>
-          Already have an account? <a onClick={() => navigate('login')}>Log in</a>
+          Already have an account? <Link to="/login">Log in</Link>
         </p>
       </div>
     </AuthShell>

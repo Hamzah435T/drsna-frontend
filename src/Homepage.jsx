@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export default function HomePage({ navigate }) {
+export default function HomePage() {
+    const navigate = useNavigate();
     const [activeCategory, setActiveCategory] = useState('All');
 
     const categories = ['All', 'General', 'Orthodontics', 'Pediatric', 'Emergency'];
@@ -66,13 +68,13 @@ export default function HomePage({ navigate }) {
                         {/* Login / Register Placeholder Buttons */}
                         <div className="hidden sm:flex items-center gap-2">
                             <button
-                                onClick={() => navigate('login')}
+                                onClick={() => navigate('/login')}
                                 className="px-3.5 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition"
                             >
                                 Log in
                             </button>
                             <button
-                                onClick={() => navigate('register')}
+                                onClick={() => navigate('/register')}
                                 className="px-3.5 py-1.5 text-xs font-semibold bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition shadow-sm"
                             >
                                 Register
@@ -81,7 +83,7 @@ export default function HomePage({ navigate }) {
 
                         {/* Logout Button */}
                             <button
-                                onClick={() => navigate('login')}
+                                onClick={() => navigate('/login')}
                                 className="bg-red-600 text-white px-4 py-1.5 sm:px-5 sm:py-2 rounded-lg font-semibold text-xs sm:text-sm shadow-sm hover:bg-red-700 transition-colors"
                             >
                                 Log out
@@ -108,7 +110,7 @@ export default function HomePage({ navigate }) {
                             </p>
                         </div>
                         <button
-                            onClick={() => navigate('register')}
+                            onClick={() => navigate('/register')}
                             className="whitespace-nowrap px-4 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-medium text-sm transition shadow-sm"
                         >
                             + Book new appointment
@@ -175,7 +177,7 @@ export default function HomePage({ navigate }) {
                                     </div>
 
                                     <button
-                                        onClick={() => navigate('register')}
+                                        onClick={() => navigate('/register')}
                                         className="self-end sm:self-center px-4 py-2 rounded-xl border border-sky-600 text-sky-600 font-medium text-xs sm:text-sm hover:bg-sky-50 transition"
                                     >
                                         View availability

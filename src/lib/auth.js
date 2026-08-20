@@ -3,11 +3,6 @@ export const validEmail = s => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 
 export const CITIES = ['Amman', 'Zarqa', 'Irbid', 'Aqaba', 'Salt', 'Madaba', 'Mafraq', 'Jerash', 'Ajloun', 'Karak', 'Tafilah', "Ma'an"];
 
-export const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-export const DAYS = Array.from({ length: 31 }, (_, i) => i + 1);
-export const YEARS = Array.from({ length: 71 }, (_, i) => 2010 - i); // 2010 .. 1940
-
 // Demo-only uniqueness checks — real checks run server-side.
 export const TAKEN_EMAILS = ['taken@example.com'];
 export const TAKEN_LICENSES = ['45120'];
