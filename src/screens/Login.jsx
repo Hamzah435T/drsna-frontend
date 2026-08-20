@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import AuthShell from '../components/AuthShell';
 import { validEmail, TAKEN_EMAILS } from '../lib/auth';
 
-export default function Login({ navigate }) {
+export default function Login() {
+  const navigate = useNavigate();
   const [mode, setMode] = useState('patient');
   const [errs, setErrs] = useState({});
   const [email, setEmail] = useState('');
@@ -18,7 +20,7 @@ export default function Login({ navigate }) {
     else if (TAKEN_EMAILS.includes(mail)) e.email = 'This email is already registered.';
     if (!password) e.password = 'Enter your password.';
     setErrs(e);
-    if (Object.keys(e).length === 0) navigate('home');
+    if (Object.keys(e).length === 0) navigate('/home');
   };
 
   const isClinic = mode === 'clinic';
@@ -37,7 +39,7 @@ export default function Login({ navigate }) {
         {isClinic && (
           <div className="clinic-note">
             <b>Clinic access:</b> Clinic accounts are created by request and activated after review by the DrSna team.{' '}
-            <a onClick={() => navigate('register')} style={{ color: 'var(--blue-dark)', fontWeight: 600, cursor: 'pointer' }}>Apply as a clinic →</a>
+            <Link to="/register" style={{ color: 'var(--blue-dark)', fontWeight: 600 }}>Apply as a clinic →</Link>
           </div>
         )}
 
@@ -80,7 +82,7 @@ export default function Login({ navigate }) {
         </button>
 
         <p className="switch-line" style={{ marginTop: 24 }}>
-          Don't have an account? <a onClick={() => navigate('register')}>Create one</a>
+          Don't have an account? <Link to="/register">Create one</Link>
         </p>
       </div>
     </AuthShell>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './styles/auth.css';
 import HomePage from './HomePage';
 import Login from './screens/Login';
@@ -7,31 +7,24 @@ import VerifyEmail from './screens/VerifyEmail';
 import ClinicSubmitted from './screens/ClinicSubmitted';
 
 function App() {
-  const [screen, setScreen] = useState('login');
-  const [pending, setPending] = useState({});
-
-  const navigate = (name, data) => {
-    if (data) setPending(data);
-    setScreen(name);
-    window.scrollTo(0, 0);
-  };
-
   return (
-    <>
+    <BrowserRouter>
       <div className="too-narrow">
         <h2>DrSna is a desktop experience</h2>
         <p>This booking dashboard is designed for larger screens. Please open it on a laptop or desktop computer to continue.</p>
       </div>
       <div id="app">
-        {screen === 'login' && <Login navigate={navigate} />}
-        {screen === 'register' && <Register navigate={navigate} />}
-        {screen === 'verify' && <VerifyEmail email={pending.email || ''} navigate={navigate} />}
-        {screen === 'clinic-submitted' && (
-          <ClinicSubmitted clinicName={pending.clinicName || ''} clinicEmail={pending.clinicEmail || ''} navigate={navigate} />
-        )}
-        {screen === 'home' && <HomePage navigate={navigate} />}
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/verify" element={<VerifyEmail />} />
+          <Route path="/clinic-request" element={<ClinicSubmitted />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
       </div>
-    </>
+    </BrowserRouter>
   );
 }
 

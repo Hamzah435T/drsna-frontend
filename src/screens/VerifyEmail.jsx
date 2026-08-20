@@ -1,7 +1,11 @@
 import { useRef, useState } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import AuthShell from '../components/AuthShell';
 
-export default function VerifyEmail({ email, navigate }) {
+export default function VerifyEmail() {
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  const email = state?.email || '';
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [err, setErr] = useState(false);
   const [resent, setResent] = useState(false);
@@ -30,7 +34,7 @@ export default function VerifyEmail({ email, navigate }) {
 
   const submit = () => {
     if (otp.join('').length === 6) {
-      navigate('home');
+      navigate('/home');
     } else {
       setErr(true);
     }
@@ -74,7 +78,7 @@ export default function VerifyEmail({ email, navigate }) {
         <p className="resend-line">
           Didn't get the code? <a onClick={resend}>Resend code</a> <span className={'resend-ok' + (resent ? ' show' : '')}>Code resent!</span>
         </p>
-        <p className="switch-line"><a onClick={() => navigate('register')}>Back to sign up</a></p>
+        <p className="switch-line"><Link to="/register">Back to sign up</Link></p>
       </div>
     </AuthShell>
   );
