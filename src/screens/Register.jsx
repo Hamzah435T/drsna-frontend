@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import AuthShell from '../components/AuthShell';
+import PasswordInput from '../components/PasswordInput';
 import { CITIES, validEmail, TAKEN_EMAILS, TAKEN_LICENSES, PASSWORD_RE, LICENSE_RE } from '../lib/auth';
 
 export default function Register() {
@@ -8,8 +9,8 @@ export default function Register() {
   const [mode, setMode] = useState('patient');
   const [errs, setErrs] = useState({});
   const [f, setF] = useState({
-    pName: '', pEmail: '', pCity: '', pPassword: '', pConfirm: '', pTerms: false,
-    cName: '', cLicense: '', cEmail: '', cCity: '', cTerms: false,
+    pName: '', pEmail: '', pCity: '', pPassword: '', pConfirm: '',
+    cName: '', cLicense: '', cEmail: '', cCity: '', cPassword: '',
   });
 
   const set = (k, val) => setF(prev => ({ ...prev, [k]: val }));
@@ -26,7 +27,6 @@ export default function Register() {
     const pw = f.pPassword;
     if (!PASSWORD_RE.test(pw)) e.pPassword = 'Password must be 8–12 characters with at least one number and one special character.';
     if (pw && f.pConfirm !== pw) e.pConfirm = "Passwords don't match.";
-    if (!f.pTerms) e.pTerms = 'Please accept the Terms & Privacy Policy.';
     setErrs(e);
     return Object.keys(e).length === 0;
   };
@@ -43,7 +43,7 @@ export default function Register() {
     else if (!validEmail(email)) e.cEmail = 'Enter a valid email address.';
     else if (TAKEN_EMAILS.includes(email)) e.cEmail = 'This email is already registered.';
     if (!f.cCity) e.cCity = 'Please select your city.';
-    if (!f.cTerms) e.cTerms = 'Please accept the Terms & Privacy Policy.';
+    if (!PASSWORD_RE.test(f.cPassword)) e.cPassword = 'Password must be 8–12 characters with at least one number and one special character.';
     setErrs(e);
     return Object.keys(e).length === 0;
   };
@@ -104,18 +104,22 @@ export default function Register() {
             </div>
             <div className={fieldCls('pPassword')}>
               <label>Password</label>
-              <input id="pPassword" type="password" value={f.pPassword} placeholder="Create a password" onChange={e => { set('pPassword', e.target.value); clearErr('pPassword'); }} />
+              <PasswordInput id="pPassword" value={f.pPassword} placeholder="Create a password" onChange={e => { const val = e.target.value;
+                if (val.length <= 12) {
+                  set('pPassword', val);
+                  clearErr('pPassword');
+                } }} />
               <div className="err">{errs.pPassword || ''}</div>
               <div className="field-hint">8–12 characters with at least one number and one special character.</div>
             </div>
             <div className={fieldCls('pConfirm')}>
               <label>Confirm password</label>
-              <input id="pConfirm" type="password" value={f.pConfirm} placeholder="Re-enter your password" onChange={e => { set('pConfirm', e.target.value); clearErr('pConfirm'); }} />
+              <PasswordInput id="pConfirm" value={f.pConfirm} placeholder="Re-enter your password" onChange={e => { const val = e.target.value;
+                if (val.length <= 12) {
+                  set('pConfirm', val);
+                  clearErr('pConfirm');
+                } }} />
               <div className="err">{errs.pConfirm || ''}</div>
-            </div>
-            <div className={fieldCls('pTerms')}>
-              <label className="checkbox"><input id="pTerms" type="checkbox" checked={f.pTerms} onChange={e => { set('pTerms', e.target.checked); clearErr('pTerms'); }} />I agree to the Terms &amp; Privacy Policy</label>
-              <div className="err">{errs.pTerms || ''}</div>
             </div>
           </div>
         )}
@@ -127,12 +131,17 @@ export default function Register() {
               <input id="cName" type="text" value={f.cName} placeholder="Bright Smiles Dental Clinic" onChange={e => { set('cName', e.target.value); clearErr('cName'); }} />
               <div className="err">{errs.cName || ''}</div>
             </div>
-            <div className="clinic-note">
-              <b>Note:</b> Clinic accounts are reviewed by the DrSna team before appearing in patient search results. This usually takes 1–2 business days.
-            </div>
             <div className={fieldCls('cLicense')}>
               <label>License number</label>
-              <input id="cLicense" type="text" value={f.cLicense} placeholder="e.g. 45120" onChange={e => { set('cLicense', e.target.value); clearErr('cLicense'); }} />
+              <input
+                id="cLicense"
+                type="text"
+                inputMode="numeric"
+                value={f.cLicense}
+                placeholder="e.g. 45120"
+                maxLength={10}
+                onChange={e => { set('cLicense', e.target.value.replace(/\D/g, '')); clearErr('cLicense'); }}
+              />
               <div className="err">{errs.cLicense || ''}</div>
               <div className="field-hint">Jordan Ministry of Health license (5–10 digits)</div>
             </div>
@@ -153,9 +162,15 @@ export default function Register() {
               {citySelect('clinicCity', f.cCity, 'cCity')}
               <div className="err">{errs.cCity || ''}</div>
             </div>
-            <div className={fieldCls('cTerms')}>
-              <label className="checkbox"><input id="cTerms" type="checkbox" checked={f.cTerms} onChange={e => { set('cTerms', e.target.checked); clearErr('cTerms'); }} />I agree to the Terms &amp; Privacy Policy</label>
-              <div className="err">{errs.cTerms || ''}</div>
+            <div className={fieldCls('cPassword')}>
+              <label>Password</label>
+              <PasswordInput id="cPassword" value={f.cPassword} placeholder="Create a password" onChange={e => { const val = e.target.value;
+                if (val.length <= 12) {
+                  set('cPassword', val);
+                  clearErr('cPassword');
+                } }} />
+              <div className="err">{errs.cPassword || ''}</div>
+              <div className="field-hint">8–12 characters with at least one number and one special character.</div>
             </div>
           </div>
         )}
